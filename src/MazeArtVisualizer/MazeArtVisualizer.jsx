@@ -23,11 +23,24 @@ export default class MazeArtVisualizer extends Component {
     this.setState({ grid });
   }
 
+  onClick(row, col) {
+    const { grid } = this.state;
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const updateNode = {
+      ...node,
+      isStart: !node.isStart,
+    };
+    newGrid[row][col] = updateNode;
+    this.setState({ grid: newGrid });
+    console.log("ree", row, col);
+  }
+
   render() {
     const { grid } = this.state;
 
     return (
-      <div id="grid" onClick={this.handleClick}>
+      <div id="grid">
         {grid.map((row, rowIndx) => {
           return (
             <div key={rowIndx}>
@@ -40,7 +53,9 @@ export default class MazeArtVisualizer extends Component {
                     row={row}
                     isStart={isStart}
                     isEnd={isEnd}
-                    handleClick={(col, row) => this.handleClick(col, row)}
+                    onClick={(row, col) => {
+                      this.onClick(row, col);
+                    }}
                   ></Node>
                 );
               })}
@@ -50,28 +65,14 @@ export default class MazeArtVisualizer extends Component {
       </div>
     );
   }
-
-  handleClick(col, row) {
-    // const grid = this.state.grid;
-    // const newGrid = grid.slice();
-    // const node = newGrid[row][col];
-    // const newNode = {
-    //   ...node,
-    //   isStart: !node.isStart,
-    // };
-    // newGrid[row][col] = newNode;
-    // this.setState({ nodes: newGrid });
-    console.log(col, row);
-  }
 }
 
 const setupNode = (row, col) => {
   const node = {
-    col,
     row,
+    col,
     isStart: row === 5 && col === 1,
     isEnd: row === 5 && col === 13,
   };
-  console.log(node);
   return node;
 };

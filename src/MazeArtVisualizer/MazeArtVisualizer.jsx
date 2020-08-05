@@ -8,6 +8,8 @@ export default class MazeArtVisualizer extends Component {
     super(props);
     this.state = {
       grid: [],
+      hasStart: false,
+      hasEnd: false,
     };
   }
 
@@ -20,20 +22,53 @@ export default class MazeArtVisualizer extends Component {
       }
       grid.push(currRow);
     }
-    this.setState({ grid });
+    const hasStart = true;
+    const hasEnd = true;
+    this.setState({ grid, hasStart, hasEnd });
   }
 
-  onClick(row, col) {
-    const { grid } = this.state;
+  onMouseDown(row, col) {
+    const { grid, hasStart, hasEnd } = this.state;
     const newGrid = grid.slice();
     const node = newGrid[row][col];
-    const updateNode = {
-      ...node,
-      isStart: !node.isStart,
-    };
-    newGrid[row][col] = updateNode;
-    this.setState({ grid: newGrid });
-    console.log("ree", row, col);
+    const { isStart, isEnd } = node;
+    if (isStart) {
+      const newNode = {
+        ...node,
+        isStart: false,
+      };
+      newGrid[row][col] = newNode;
+      this.setState({ grid: newGrid, hasStart: !hasStart });
+    } else if (isEnd) {
+      const newNode = {
+        ...node,
+        isEnd: false,
+      };
+      newGrid[row][col] = newNode;
+      this.setState({ grid: newGrid, hasEnd: !hasEnd });
+    }
+  }
+
+  onMouseUp(row, col) {
+    const { grid, hasStart, hasEnd } = this.state;
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const { isEnd, isStart } = node;
+    if (!hasStart && !isEnd) {
+      const newNode = {
+        ...node,
+        isStart: true,
+      };
+      newGrid[row][col] = newNode;
+      this.setState({ grid: newGrid, hasStart: !hasStart });
+    } else if (!hasEnd && !isStart) {
+      const newNode = {
+        ...node,
+        isEnd: true,
+      };
+      newGrid[row][col] = newNode;
+      this.setState({ grid: newGrid, hasEnd: !hasEnd });
+    }
   }
 
   render() {
@@ -53,8 +88,11 @@ export default class MazeArtVisualizer extends Component {
                     row={row}
                     isStart={isStart}
                     isEnd={isEnd}
-                    onClick={(row, col) => {
-                      this.onClick(row, col);
+                    onMouseDown={(row, col) => {
+                      this.onMouseDown(row, col);
+                    }}
+                    onMouseUp={(row, col) => {
+                      this.onMouseUp(row, col);
                     }}
                   ></Node>
                 );

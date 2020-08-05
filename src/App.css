@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.gamer {
+  text-align: center;
+  margin-bottom: -100px;
+}

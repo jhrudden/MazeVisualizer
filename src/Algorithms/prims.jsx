@@ -9,32 +9,54 @@ export function prims(graph) {
   const randCol = Math.floor(Math.random() * graph[0].length);
   const firstInWork = graph[randRow][randCol];
   const worklist = [firstInWork];
-  const addInOrder = [[firstInWork, firstInWork]];
+  const addInOrder = [];
   var connectFrom = new Map();
   const vertices = [firstInWork];
   const graphSize = graph.length * graph[0].length;
+  connectFrom.set(firstInWork, firstInWork);
+
   while (vertices.length < graphSize) {
     const currVal = worklist.pop(Math.floor(Math.random * worklist.length));
-    if (connectFrom.currVal == null || connectFrom.currVal != currVal) {
-      const curNeighbors = getNeighbors(graph, currVal);
-      for (var i = 0; i < curNeighbors.length; i++) {
-        const neighbor = curNeighbors[i];
-        if (connectFrom.neighbor == null) {
-          connectFrom[neighbor] = currVal;
-          worklist.push(neighbor);
-        }
-        console.log(connectFrom);
+    const curNeighbors = getNeighbors(graph, currVal);
+    for (var i = 0; i < curNeighbors.length; i++) {
+      const neighbor = curNeighbors[i];
+      if (!connectFrom.has(neighbor)) {
+        connectFrom.set(neighbor, currVal);
+        worklist.push(neighbor);
       }
-      addInOrder.push([connectFrom.currVal, currVal]);
-      connectFrom[currVal] = currVal;
-      vertices.push(currVal);
     }
-    console.log(worklist.length);
+    addInOrder.push([connectFrom.get(currVal), currVal]);
+    connectFrom.set(currVal, currVal);
+    vertices.push(currVal);
   }
   return addInOrder;
 }
 
+function getNeighbors(graph, node) {
+  const { col, row } = node;
+  console.log(row, col, "coords");
+  const neighbors = [];
+  if (col > 0) {
+    neighbors.push(graph[row][col - 1]);
+    console.log("left", graph[row][col - 1]);
+  }
+  if (row > 0) {
+    neighbors.push(graph[row - 1][col]);
+    console.log("up", graph[row - 1][col]);
+  }
+  if (graph.length - 1 > row) {
+    console.log("down", graph[row + 1][col]);
+    neighbors.push(graph[row + 1][col]);
+  }
+  if (graph[0].length - 1 > col) {
+    console.log("right", graph[row][col + 1]);
+    neighbors.push(graph[row][col + 1]);
+  }
+  return neighbors;
+}
+
 export function connect(node1, node2) {
+  console.log("gothere");
   if (node1.row < node2.row) {
     node1.neighbors[0] = node2;
     node2.neighbors[1] = node1;
@@ -48,22 +70,4 @@ export function connect(node1, node2) {
     node1.neighbors[2] = node2;
     node2.neighbors[3] = node1;
   }
-}
-
-function getNeighbors(graph, node) {
-  const { col, row } = node;
-  const neighbors = [];
-  if (col > 0) {
-    neighbors.push(graph[row][col - 1]);
-  }
-  if (row > 0) {
-    neighbors.push(graph[row - 1][col]);
-  }
-  if (graph.length - 1 > row) {
-    neighbors.push(graph[row + 1][col]);
-  }
-  if (graph[0].length - 1 > col) {
-    neighbors.push(graph[row][col + 1]);
-  }
-  return neighbors;
 }

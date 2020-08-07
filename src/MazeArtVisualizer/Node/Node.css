@@ -1,7 +1,7 @@
 .node {
   width: 30px;
   height: 30px;
-  outline: 1px solid black;
+  outline: 1px solid #8bc7b8;
   display: inline-block;
   margin-bottom: -3px;
 }
@@ -12,4 +12,17 @@
 
 .finishNode {
   background-color: red;
+}
+
+.topWall {
+  background-color: black;
+}
+
+.bottomWall {
+}
+
+.leftWall {
+}
+
+.rightWall {
 }

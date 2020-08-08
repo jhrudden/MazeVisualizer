@@ -5,16 +5,16 @@ export default class Node extends Component {
   drawWalls() {
     const { neighbors } = this.props;
     let str = "";
-    if (neighbors[0] != null) {
+    if (neighbors[0] == null) {
       str += " topWall";
     }
-    if (neighbors[1] != null) {
+    if (neighbors[1] == null) {
       str += " bottomWall";
     }
-    if (neighbors[2] != null) {
+    if (neighbors[2] == null) {
       str += " leftWall";
     }
-    if (neighbors[3] != null) {
+    if (neighbors[3] == null) {
       str += " rightWall";
     }
     return str;

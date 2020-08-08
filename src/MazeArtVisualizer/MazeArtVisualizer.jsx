@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import Node from "./Node/Node.jsx";
 import "./MazeArtVisualizer.css";
+import { prims, connect } from "../Algorithms/prims.jsx";
 
 export default class MazeArtVisualizer extends Component {
   constructor(props) {
@@ -12,10 +13,9 @@ export default class MazeArtVisualizer extends Component {
       hasEnd: false,
     };
   }
-
   componentDidMount() {
     const grid = [];
-    for (let row = 0; row < 11; row++) {
+    for (let row = 0; row < 10; row++) {
       const currRow = [];
       for (let col = 0; col < 15; col++) {
         currRow.push(setupNode(row, col));
@@ -46,9 +46,10 @@ export default class MazeArtVisualizer extends Component {
       };
       newGrid[row][col] = newNode;
       this.setState({ grid: newGrid, hasEnd: !hasEnd });
+    } else {
+      return;
     }
   }
-
   onMouseUp(row, col) {
     const { grid, hasStart, hasEnd } = this.state;
     const newGrid = grid.slice();
@@ -68,6 +69,32 @@ export default class MazeArtVisualizer extends Component {
       };
       newGrid[row][col] = newNode;
       this.setState({ grid: newGrid, hasEnd: !hasEnd });
+    } else {
+      return;
+    }
+  }
+
+  prims() {
+    const { grid } = this.state;
+    const loadOrder = prims(grid);
+    this.visualizePrims(loadOrder);
+  }
+
+  visualizePrims(loadOrder) {
+    const { grid } = this.state;
+    for (var i = 0; i < loadOrder.length; i++) {
+      const currConnection = loadOrder[i];
+      const node1 = currConnection[0];
+      const node2 = currConnection[1];
+      if (node1 != node2) {
+        connect(node1, node2);
+        setTimeout(() => {
+          node1.inMaze = true;
+          node2.inMaze = true;
+
+          this.setState({ grid });
+        }, 25 * i);
+      }
     }
   }
 
@@ -75,32 +102,37 @@ export default class MazeArtVisualizer extends Component {
     const { grid } = this.state;
 
     return (
-      <div id="grid">
-        {grid.map((row, rowIndx) => {
-          return (
-            <div key={rowIndx}>
-              {row.map((node, nodeIndx) => {
-                const { row, col, isStart, isEnd } = node;
-                return (
-                  <Node
-                    key={nodeIndx}
-                    col={col}
-                    row={row}
-                    isStart={isStart}
-                    isEnd={isEnd}
-                    onMouseDown={(row, col) => {
-                      this.onMouseDown(row, col);
-                    }}
-                    onMouseUp={(row, col) => {
-                      this.onMouseUp(row, col);
-                    }}
-                  ></Node>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+      <>
+        <button onClick={() => this.prims()}>Build Maze</button>
+        <div id="grid">
+          {grid.map((row, rowIndx) => {
+            return (
+              <div key={rowIndx}>
+                {row.map((node, nodeIndx) => {
+                  const { row, col, isStart, isEnd, inMaze, neighbors } = node;
+                  return (
+                    <Node
+                      key={nodeIndx}
+                      col={col}
+                      row={row}
+                      isStart={isStart}
+                      isEnd={isEnd}
+                      onMouseDown={(row, col) => {
+                        this.onMouseDown(row, col);
+                      }}
+                      onMouseUp={(row, col) => {
+                        this.onMouseUp(row, col);
+                      }}
+                      inMaze={inMaze}
+                      neighbors={neighbors}
+                    ></Node>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </>
     );
   }
 }
@@ -111,6 +143,8 @@ const setupNode = (row, col) => {
     col,
     isStart: row === 5 && col === 1,
     isEnd: row === 5 && col === 13,
+    neighbors: [null, null, null, null],
+    inMaze: false,
   };
   return node;
 };

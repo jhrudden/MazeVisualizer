@@ -1,8 +1,9 @@
 .node {
   width: 30px;
   height: 30px;
-  outline: 1px solid black;
+  outline: 1px solid #8bc7b8;
   display: inline-block;
+  border: solid 3px transparent;
   margin-bottom: -3px;
 }
 
@@ -12,4 +13,24 @@
 
 .finishNode {
   background-color: red;
+}
+
+.topWall {
+  /* border-style: solid none none none; */
+  border-top: 3px solid black;
+}
+
+.bottomWall {
+  /* border-style: none none solid none; */
+  border-bottom: 3px solid black;
+}
+
+.leftWall {
+  /* border-style: none none none solid; */
+  border-left: 3px solid black;
+}
+
+.rightWall {
+  /* border-style: none solid none none; */
+  border-right: 3px solid black;
 }

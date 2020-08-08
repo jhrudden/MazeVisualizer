@@ -81,27 +81,21 @@ export default class MazeArtVisualizer extends Component {
   }
 
   visualizePrims(loadOrder) {
-    console.log(loadOrder);
-    while (loadOrder.length > 0) {
-      const currConnection = loadOrder.pop(0);
+    const { grid } = this.state;
+    for (var i = 0; i < loadOrder.length; i++) {
+      const currConnection = loadOrder[i];
       const node1 = currConnection[0];
       const node2 = currConnection[1];
-      console.log(node1, node2);
       if (node1 != node2) {
         connect(node1, node2);
+        setTimeout(() => {
+          node1.inMaze = true;
+          node2.inMaze = true;
+
+          this.setState({ grid });
+        }, 25 * i);
       }
-      node1.inMaze = true;
-      node2.inMaze = true;
-      console.log(
-        node1.row,
-        node1.col,
-        node1.neighbors,
-        node2.row,
-        node2.col,
-        node2.neighbors
-      );
     }
-    setTimeout(100);
   }
 
   render() {

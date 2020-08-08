@@ -15,8 +15,10 @@ export function prims(graph) {
   const graphSize = graph.length * graph[0].length;
   connectFrom.set(firstInWork, firstInWork);
 
-  while (vertices.length < graphSize) {
-    const currVal = worklist.pop(Math.floor(Math.random * worklist.length));
+  while (vertices.length <= graphSize) {
+    const randVal = Math.floor(Math.random() * worklist.length);
+    const currVal = worklist.pop(randVal);
+
     const curNeighbors = getNeighbors(graph, currVal);
     for (var i = 0; i < curNeighbors.length; i++) {
       const neighbor = curNeighbors[i];
@@ -34,35 +36,29 @@ export function prims(graph) {
 
 function getNeighbors(graph, node) {
   const { col, row } = node;
-  console.log(row, col, "coords");
   const neighbors = [];
   if (col > 0) {
     neighbors.push(graph[row][col - 1]);
-    console.log("left", graph[row][col - 1]);
   }
   if (row > 0) {
     neighbors.push(graph[row - 1][col]);
-    console.log("up", graph[row - 1][col]);
   }
   if (graph.length - 1 > row) {
-    console.log("down", graph[row + 1][col]);
     neighbors.push(graph[row + 1][col]);
   }
   if (graph[0].length - 1 > col) {
-    console.log("right", graph[row][col + 1]);
     neighbors.push(graph[row][col + 1]);
   }
   return neighbors;
 }
 
 export function connect(node1, node2) {
-  console.log("gothere");
   if (node1.row < node2.row) {
-    node1.neighbors[0] = node2;
-    node2.neighbors[1] = node1;
-  } else if (node1.row > node2.row) {
     node1.neighbors[1] = node2;
     node2.neighbors[0] = node1;
+  } else if (node1.row > node2.row) {
+    node1.neighbors[0] = node2;
+    node2.neighbors[1] = node1;
   } else if (node1.col < node2.col) {
     node1.neighbors[3] = node2;
     node2.neighbors[2] = node1;

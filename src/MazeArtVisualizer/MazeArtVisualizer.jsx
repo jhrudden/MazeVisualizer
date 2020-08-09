@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Node from "./Node/Node.jsx";
 import "./MazeArtVisualizer.css";
 import { prims, connect } from "../Algorithms/prims.jsx";
+import TopBar from "./TopBar/TopBar.jsx";
 
 export default class MazeArtVisualizer extends Component {
   constructor(props) {
@@ -14,14 +15,7 @@ export default class MazeArtVisualizer extends Component {
     };
   }
   componentDidMount() {
-    const grid = [];
-    for (let row = 0; row < 10; row++) {
-      const currRow = [];
-      for (let col = 0; col < 15; col++) {
-        currRow.push(setupNode(row, col));
-      }
-      grid.push(currRow);
-    }
+    const grid = constructGrid();
     const hasStart = true;
     const hasEnd = true;
     this.setState({ grid, hasStart, hasEnd });
@@ -98,12 +92,18 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
+  resetGrid() {
+    const resetGrid = constructGrid();
+    this.setState({ grid: resetGrid });
+  }
+
   render() {
     const { grid } = this.state;
 
     return (
       <>
-        <button onClick={() => this.prims()}>Build Maze</button>
+        <TopBar prims={() => this.prims()} resetGrid={() => this.resetGrid()} />
+
         <div id="grid">
           {grid.map((row, rowIndx) => {
             return (
@@ -147,4 +147,16 @@ const setupNode = (row, col) => {
     inMaze: false,
   };
   return node;
+};
+
+const constructGrid = () => {
+  const grid = [];
+  for (let row = 0; row < 10; row++) {
+    const currRow = [];
+    for (let col = 0; col < 15; col++) {
+      currRow.push(setupNode(row, col));
+    }
+    grid.push(currRow);
+  }
+  return grid;
 };

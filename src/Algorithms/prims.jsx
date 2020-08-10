@@ -14,7 +14,7 @@ export function prims(graph) {
   const worklist = new PriorityQ();
   worklist.insert(
     [firstInWork, firstInWork],
-    Math.floor(Math.random * graphSize)
+    Math.floor(Math.random() * graphSize)
   );
   const addInOrder = [];
   const vertices = [];
@@ -22,7 +22,6 @@ export function prims(graph) {
   while (vertices.length < graphSize) {
     const currEdge = worklist.remove_min();
     const [u, v] = currEdge;
-    console.log(v);
 
     if (!vertices.includes(v)) {
       const incidentNeighbors = getNeighbors(graph, v);
@@ -30,7 +29,7 @@ export function prims(graph) {
       addInOrder.push(currEdge);
       for (var i = 0; i < incidentNeighbors.length; i++) {
         const neighbor = incidentNeighbors[i];
-        worklist.insert([v, neighbor], Math.floor(Math.random * graphSize));
+        worklist.insert([v, neighbor], Math.floor(Math.random() * graphSize));
       }
     }
   }

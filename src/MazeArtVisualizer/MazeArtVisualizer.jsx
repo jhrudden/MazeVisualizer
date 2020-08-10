@@ -87,9 +87,10 @@ export default class MazeArtVisualizer extends Component {
           node2.inMaze = true;
 
           this.setState({ grid });
-        }, 25 * i);
+        }, 50 * i);
       }
     }
+    // console.log(this.state.grid);
   }
 
   resetGrid() {

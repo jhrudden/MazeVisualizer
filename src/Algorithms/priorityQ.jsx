@@ -1,0 +1,66 @@
+export default class PriorityQ {
+  constructor() {
+    this.queue = [];
+  }
+
+  insert(item, weight) {
+    this.queue.push([weight, item]);
+    this.up_heap(this.queue.length - 1);
+  }
+
+  remove_min() {
+    const last_index = this.queue.length - 1;
+    const temp = this.queue[0];
+    this.queue[0] = this.queue[last_index];
+    this.queue[last_index] = temp;
+    const min = this.queue.pop(last_index);
+    this.down_heap(0);
+
+    return min[1];
+  }
+
+  up_heap(index) {
+    var parent = Math.floor((index - 1) / 2);
+
+    if (index > 0 && this.queue[index][0] < this.queue[parent][0]) {
+      const temp = this.queue[parent];
+      this.queue[parent] = this.queue[index];
+      this.queue[index] = temp;
+      index = parent;
+
+      this.up_heap(index);
+    }
+  }
+
+  down_heap(index) {
+    if (index >= this.queue.length - 1) {
+      return;
+    }
+    const l_child_i = index * 2 + 1;
+    const r_child_i = index * 2 + 2;
+
+    if (l_child_i <= this.queue.length - 1) {
+      var min_child_i = l_child_i;
+      if (r_child_i <= this.queue.length - 1) {
+        if (this.queue[l_child_i][0] > this.queue[r_child_i][0]) {
+          min_child_i = r_child_i;
+        }
+      }
+    } else {
+      return;
+    }
+
+    if (this.queue[index][0] > this.queue[min_child_i][0]) {
+      const temp = this.queue[min_child_i];
+      this.queue[min_child_i] = this.queue[index];
+      this.queue[index] = temp;
+      index = min_child_i;
+
+      this.down_heap(index);
+    }
+  }
+
+  is_empty() {
+    return this.queue.length == 0;
+  }
+}

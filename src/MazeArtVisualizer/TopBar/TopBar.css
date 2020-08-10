@@ -1,0 +1,64 @@
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.m-build-dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.m-build-dropbtn {
+  border-radius: 7px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  margin: 3px;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+}
+.m-build-dropdown:hover .m-build-dropbtn {
+  background-color: #8bc7b8;
+}
+.m-build-content {
+  display: none;
+  position: absolute;
+  background-color: #8bc7b8;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 7px;
+}
+
+.m-build-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+.m-build-content a:hover {
+  background-color: #ddd;
+}
+
+.m-build-dropdown:hover .m-build-content {
+  display: block;
+}
+
+.navBar-buttons {
+  margin: 5px;
+  float: left;
+  font-size: 14px;
+  color: white;
+  background-color: #333;
+  border: none;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border-radius: 7px;
+}
+.navBar-buttons:hover {
+  background-color: #8bc7b8;
+}

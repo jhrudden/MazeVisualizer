@@ -19,6 +19,7 @@ export default class Node extends Component {
     }
     return str;
   }
+
   render() {
     const {
       row,
@@ -28,13 +29,20 @@ export default class Node extends Component {
       onMouseDown,
       onMouseUp,
       inMaze,
+      setColor,
     } = this.props;
+
     return (
       <div
         id={`node-${row}-${col}`}
         className={`node ${isStart ? "startNode" : isEnd ? "finishNode" : ""} ${
           inMaze ? this.drawWalls() : ""
         }`}
+        style={
+          setColor != null
+            ? { backgroundColor: setColor, outline: `1px solid ${setColor}` }
+            : {}
+        }
         onMouseDown={() => onMouseDown(row, col)}
         onMouseUp={() => onMouseUp(row, col)}
       ></div>

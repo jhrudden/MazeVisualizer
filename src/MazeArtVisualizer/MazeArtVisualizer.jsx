@@ -90,6 +90,14 @@ export default class MazeArtVisualizer extends Component {
       "#DF9F9E",
       "#EA9393",
       "#F68888",
+      "#EA9393",
+      "#DF9F9E",
+      "#D3AAAA",
+      "#C8B6B5",
+      "#B1CDCC",
+      "#A5D8D7",
+      "#9AE4E3",
+      "#8EEFEE",
     ];
 
     for (var i = 0; i < loadOrder.length; i++) {
@@ -107,7 +115,7 @@ export default class MazeArtVisualizer extends Component {
         }
 
         this.setState({ grid });
-      }, 50 * i);
+      }, i);
     }
   }
 
@@ -201,9 +209,9 @@ const setupNode = (row, col) => {
 
 const constructGrid = () => {
   const grid = [];
-  for (let row = 0; row < 10; row++) {
+  for (let row = 0; row < 18; row++) {
     const currRow = [];
-    for (let col = 0; col < 15; col++) {
+    for (let col = 0; col < 41; col++) {
       currRow.push(setupNode(row, col));
     }
     grid.push(currRow);

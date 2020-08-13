@@ -4,10 +4,15 @@ import "./TopBar.css";
 export default class TopBar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showingWalls: false,
+      colorizePath: false,
+    };
   }
 
   render() {
     const { prims, resetGrid, toggleColoredPath, disableWalls } = this.props;
+    const { showingWalls, colorizePath } = this.state;
     return (
       <div className="navbar">
         <div className="buttons">
@@ -24,12 +29,21 @@ export default class TopBar extends Component {
           </div>
           <button
             className="navbar-contents"
-            onClick={() => toggleColoredPath()}
+            onClick={() => {
+              this.setState({ colorizePath: !colorizePath });
+              toggleColoredPath();
+            }}
           >
-            Colored Paths
+            Colorized Paths: {!colorizePath ? "Off" : "On"}
           </button>
-          <button className="navbar-contents" onClick={() => disableWalls()}>
-            Show Walls
+          <button
+            className="navbar-contents"
+            onClick={() => {
+              this.setState({ showingWalls: !showingWalls });
+              disableWalls();
+            }}
+          >
+            Walls: {!showingWalls ? "Off" : "On"}
           </button>
         </div>
       </div>

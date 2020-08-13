@@ -45,6 +45,7 @@ export default class MazeArtVisualizer extends Component {
       return;
     }
   }
+
   onMouseUp(row, col) {
     const { grid, hasStart, hasEnd } = this.state;
     const newGrid = grid.slice();
@@ -98,8 +99,8 @@ export default class MazeArtVisualizer extends Component {
       const gradIndex = i % gradient.length;
       connect(node1, node2);
       setTimeout(() => {
-        node1.inMaze = true;
-        node2.inMaze = true;
+        node1.showWalls = true;
+        node2.showWalls = true;
 
         if (isPathColored) {
           node2.setColor = gradient[gradIndex];
@@ -108,7 +109,6 @@ export default class MazeArtVisualizer extends Component {
         this.setState({ grid });
       }, 50 * i);
     }
-    // console.log(this.state.grid);
   }
 
   resetGrid() {
@@ -121,6 +121,17 @@ export default class MazeArtVisualizer extends Component {
     this.setState({ isPathColored: !isPathColored });
   }
 
+  disableWalls() {
+    const { grid } = this.state;
+    for (var i = 0; i < grid.length; i++) {
+      for (var j = 0; j < grid[0].length; j++) {
+        const currItem = grid[i][j];
+        currItem.showWalls = !currItem.showWalls;
+      }
+    }
+    this.setState({ grid });
+  }
+
   render() {
     const { grid } = this.state;
 
@@ -130,6 +141,7 @@ export default class MazeArtVisualizer extends Component {
           prims={() => this.prims()}
           resetGrid={() => this.resetGrid()}
           toggleColoredPath={() => this.toggleColoredPath()}
+          disableWalls={() => this.disableWalls()}
         />
 
         <div id="grid">
@@ -142,7 +154,7 @@ export default class MazeArtVisualizer extends Component {
                     col,
                     isStart,
                     isEnd,
-                    inMaze,
+                    showWalls,
                     neighbors,
                     setColor,
                   } = node;
@@ -159,7 +171,7 @@ export default class MazeArtVisualizer extends Component {
                       onMouseUp={(row, col) => {
                         this.onMouseUp(row, col);
                       }}
-                      inMaze={inMaze}
+                      showWalls={showWalls}
                       neighbors={neighbors}
                       setColor={setColor}
                     ></Node>
@@ -181,7 +193,7 @@ const setupNode = (row, col) => {
     isStart: row === 5 && col === 1,
     isEnd: row === 5 && col === 13,
     neighbors: [null, null, null, null],
-    inMaze: false,
+    showWalls: false,
     setColor: null,
   };
   return node;

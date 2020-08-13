@@ -7,7 +7,7 @@ export default class TopBar extends Component {
   }
 
   render() {
-    const { prims, resetGrid, toggleColoredPath } = this.props;
+    const { prims, resetGrid, toggleColoredPath, disableWalls } = this.props;
     return (
       <div className="navbar">
         <div className="buttons">
@@ -27,6 +27,9 @@ export default class TopBar extends Component {
             onClick={() => toggleColoredPath()}
           >
             Colored Paths
+          </button>
+          <button className="navbar-contents" onClick={() => disableWalls()}>
+            Show Walls
           </button>
         </div>
       </div>

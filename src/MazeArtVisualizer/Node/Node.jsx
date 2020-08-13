@@ -28,7 +28,7 @@ export default class Node extends Component {
       isEnd,
       onMouseDown,
       onMouseUp,
-      inMaze,
+      showWalls,
       setColor,
     } = this.props;
 
@@ -36,7 +36,7 @@ export default class Node extends Component {
       <div
         id={`node-${row}-${col}`}
         className={`node ${isStart ? "startNode" : isEnd ? "finishNode" : ""} ${
-          inMaze ? this.drawWalls() : ""
+          showWalls ? this.drawWalls() : ""
         }`}
         style={
           setColor != null

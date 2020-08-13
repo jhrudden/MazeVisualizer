@@ -12,6 +12,7 @@ export default class MazeArtVisualizer extends Component {
       grid: [],
       hasStart: false,
       hasEnd: false,
+      isPathColored: false,
     };
   }
   componentDidMount() {
@@ -75,20 +76,37 @@ export default class MazeArtVisualizer extends Component {
   }
 
   visualizePrims(loadOrder) {
-    const { grid } = this.state;
+    const { grid, isPathColored } = this.state;
+    // TODO: make gradient get possibly a slider or maybe better longer set of colors
+    const gradient = [
+      "#83FBFA",
+      "#8EEFEE",
+      "#9AE4E3",
+      "#A5D8D7",
+      "#B1CDCC",
+      "#C8B6B5",
+      "#D3AAAA",
+      "#DF9F9E",
+      "#EA9393",
+      "#F68888",
+    ];
+
     for (var i = 0; i < loadOrder.length; i++) {
       const currConnection = loadOrder[i];
       const node1 = currConnection[0];
       const node2 = currConnection[1];
-      if (node1 != node2) {
-        connect(node1, node2);
-        setTimeout(() => {
-          node1.inMaze = true;
-          node2.inMaze = true;
+      const gradIndex = i % gradient.length;
+      connect(node1, node2);
+      setTimeout(() => {
+        node1.inMaze = true;
+        node2.inMaze = true;
 
-          this.setState({ grid });
-        }, 50 * i);
-      }
+        if (isPathColored) {
+          node2.setColor = gradient[gradIndex];
+        }
+
+        this.setState({ grid });
+      }, 50 * i);
     }
     // console.log(this.state.grid);
   }
@@ -98,19 +116,36 @@ export default class MazeArtVisualizer extends Component {
     this.setState({ grid: resetGrid });
   }
 
+  toggleColoredPath() {
+    const { isPathColored } = this.state;
+    this.setState({ isPathColored: !isPathColored });
+  }
+
   render() {
     const { grid } = this.state;
 
     return (
       <>
-        <TopBar prims={() => this.prims()} resetGrid={() => this.resetGrid()} />
+        <TopBar
+          prims={() => this.prims()}
+          resetGrid={() => this.resetGrid()}
+          toggleColoredPath={() => this.toggleColoredPath()}
+        />
 
         <div id="grid">
           {grid.map((row, rowIndx) => {
             return (
               <div key={rowIndx}>
                 {row.map((node, nodeIndx) => {
-                  const { row, col, isStart, isEnd, inMaze, neighbors } = node;
+                  const {
+                    row,
+                    col,
+                    isStart,
+                    isEnd,
+                    inMaze,
+                    neighbors,
+                    setColor,
+                  } = node;
                   return (
                     <Node
                       key={nodeIndx}
@@ -126,6 +161,7 @@ export default class MazeArtVisualizer extends Component {
                       }}
                       inMaze={inMaze}
                       neighbors={neighbors}
+                      setColor={setColor}
                     ></Node>
                   );
                 })}
@@ -146,6 +182,7 @@ const setupNode = (row, col) => {
     isEnd: row === 5 && col === 13,
     neighbors: [null, null, null, null],
     inMaze: false,
+    setColor: null,
   };
   return node;
 };

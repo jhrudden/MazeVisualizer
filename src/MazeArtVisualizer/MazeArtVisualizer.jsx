@@ -13,6 +13,8 @@ export default class MazeArtVisualizer extends Component {
       hasStart: false,
       hasEnd: false,
       isPathColored: false,
+      processing: false,
+      mazeBuilt: false,
     };
   }
   componentDidMount() {
@@ -71,13 +73,17 @@ export default class MazeArtVisualizer extends Component {
   }
 
   prims() {
-    const { grid } = this.state;
-    const loadOrder = prims(grid);
-    this.visualizePrims(loadOrder);
+    if (!this.state.processing && !this.state.mazeBuilt) {
+      this.setState({ processing: true });
+      const { grid } = this.state;
+      const loadOrder = prims(grid);
+      this.visualizePrims(loadOrder);
+    }
   }
 
-  visualizePrims(loadOrder) {
+  async visualizePrims(loadOrder) {
     const { grid, isPathColored } = this.state;
+
     // TODO: make gradient get possibly a slider or maybe better longer set of colors
     const gradient = [
       "#83FBFA",
@@ -106,22 +112,20 @@ export default class MazeArtVisualizer extends Component {
       const node2 = currConnection[1];
       const gradIndex = i % gradient.length;
       connect(node1, node2);
-      setTimeout(() => {
-        node1.showWalls = true;
-        node2.showWalls = true;
-
-        if (isPathColored) {
-          node2.setColor = gradient[gradIndex];
-        }
-
-        this.setState({ grid });
-      }, i);
+      await waitFor(20);
+      node1.showWalls = true;
+      node2.showWalls = true;
+      if (isPathColored) {
+        node2.setColor = gradient[gradIndex];
+      }
+      this.setState({ grid });
     }
+    this.setState({ processing: false, mazeBuilt: true });
   }
 
   resetGrid() {
     const resetGrid = constructGrid();
-    this.setState({ grid: resetGrid });
+    this.setState({ grid: resetGrid, mazeBuilt: false });
   }
 
   toggleColoredPath() {
@@ -130,18 +134,20 @@ export default class MazeArtVisualizer extends Component {
   }
 
   disableWalls() {
-    const { grid } = this.state;
-    for (var i = 0; i < grid.length; i++) {
-      for (var j = 0; j < grid[0].length; j++) {
-        const currItem = grid[i][j];
-        currItem.showWalls = !currItem.showWalls;
+    if (this.state.mazeBuilt) {
+      const { grid } = this.state;
+      for (var i = 0; i < grid.length; i++) {
+        for (var j = 0; j < grid[0].length; j++) {
+          const currItem = grid[i][j];
+          currItem.showWalls = !currItem.showWalls;
+        }
       }
+      this.setState({ grid });
     }
-    this.setState({ grid });
   }
 
   render() {
-    const { grid } = this.state;
+    const { grid, mazeBuilt, processing } = this.state;
 
     return (
       <>
@@ -150,6 +156,8 @@ export default class MazeArtVisualizer extends Component {
           resetGrid={() => this.resetGrid()}
           toggleColoredPath={() => this.toggleColoredPath()}
           disableWalls={() => this.disableWalls()}
+          mazeBuilt={mazeBuilt}
+          processing={processing}
         />
 
         <div id="grid">
@@ -209,12 +217,14 @@ const setupNode = (row, col) => {
 
 const constructGrid = () => {
   const grid = [];
-  for (let row = 0; row < 18; row++) {
+  for (let row = 0; row < 10; row++) {
     const currRow = [];
-    for (let col = 0; col < 41; col++) {
+    for (let col = 0; col < 15; col++) {
       currRow.push(setupNode(row, col));
     }
     grid.push(currRow);
   }
   return grid;
 };
+
+const waitFor = (delay) => new Promise((resolve) => setTimeout(resolve, delay));

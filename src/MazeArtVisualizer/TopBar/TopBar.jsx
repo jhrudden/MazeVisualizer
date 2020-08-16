@@ -11,7 +11,14 @@ export default class TopBar extends Component {
   }
 
   render() {
-    const { prims, resetGrid, toggleColoredPath, disableWalls } = this.props;
+    const {
+      prims,
+      resetGrid,
+      toggleColoredPath,
+      disableWalls,
+      processing,
+      mazeBuilt,
+    } = this.props;
     const { showingWalls, colorizePath } = this.state;
     return (
       <div className="navbar">
@@ -30,8 +37,10 @@ export default class TopBar extends Component {
           <button
             className="navbar-contents"
             onClick={() => {
-              this.setState({ colorizePath: !colorizePath });
-              toggleColoredPath();
+              if (!processing) {
+                this.setState({ colorizePath: !colorizePath });
+                toggleColoredPath();
+              }
             }}
           >
             Colorized Paths: {!colorizePath ? "Off" : "On"}
@@ -39,8 +48,10 @@ export default class TopBar extends Component {
           <button
             className="navbar-contents"
             onClick={() => {
-              this.setState({ showingWalls: !showingWalls });
-              disableWalls();
+              if (mazeBuilt) {
+                this.setState({ showingWalls: !showingWalls });
+                disableWalls();
+              }
             }}
           >
             Walls: {!showingWalls ? "Off" : "On"}

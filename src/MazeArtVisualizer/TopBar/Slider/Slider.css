@@ -1,0 +1,24 @@
+.slider {
+  -webkit-appearance: none;
+  width: 75px;
+  height: 5px;
+  border-radius: 5px;
+  background-color: #ccc;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.slider:hover {
+  opacity: 1;
+  background-color: #8bc7b8;
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}

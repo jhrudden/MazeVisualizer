@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./TopBar.css";
+import Slider from "./Slider/Slider.jsx";
 
 export default class TopBar extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ export default class TopBar extends Component {
       disableWalls,
       processing,
       mazeBuilt,
+      updateMazeSize,
     } = this.props;
     const { showingWalls, colorizePath } = this.state;
     return (
@@ -56,6 +58,14 @@ export default class TopBar extends Component {
           >
             Walls: {!showingWalls ? "Off" : "On"}
           </button>
+          <div className="navbar-slider">
+            Scale:{" "}
+            <Slider
+              updateMazeSize={(changeVector) => updateMazeSize(changeVector)}
+              mazeBuilt={mazeBuilt}
+              processing={processing}
+            />
+          </div>
         </div>
       </div>
     );

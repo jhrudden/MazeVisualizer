@@ -20,6 +20,7 @@
   margin: 3px;
   border-radius: 7px;
   font-size: 16px;
+  cursor: pointer;
 }
 
 .navbar-contents:hover {
@@ -35,6 +36,7 @@
   background-color: inherit;
   font-family: inherit;
   margin: 0;
+  cursor: pointer;
 }
 
 .drop-down-content {
@@ -66,4 +68,11 @@
 
 .drop-down:hover {
   background-color: #8bc7b8;
+}
+
+.navbar-slider {
+  color: white;
+  font-size: 18px;
+  display: inline-block;
+  margin: 3px;
 }

@@ -5,6 +5,11 @@ import "./MazeArtVisualizer.css";
 import { prims, connect } from "../Algorithms/prims.jsx";
 import TopBar from "./TopBar/TopBar.jsx";
 
+const BASE_COL_COUNT = 15;
+const BASE_ROW_COUNT = 10;
+const MAX_COL_COUNT = 45;
+const MAX_ROW_COUNT = 30;
+
 export default class MazeArtVisualizer extends Component {
   constructor(props) {
     super(props);
@@ -15,10 +20,13 @@ export default class MazeArtVisualizer extends Component {
       isPathColored: false,
       processing: false,
       mazeBuilt: false,
+      colCount: BASE_COL_COUNT,
+      rowCount: BASE_ROW_COUNT,
     };
   }
   componentDidMount() {
-    const grid = constructGrid();
+    const { colCount, rowCount } = this.state;
+    const grid = constructGrid(colCount, rowCount);
     const hasStart = true;
     const hasEnd = true;
     this.setState({ grid, hasStart, hasEnd });
@@ -124,7 +132,7 @@ export default class MazeArtVisualizer extends Component {
   }
 
   resetGrid() {
-    const resetGrid = constructGrid();
+    const resetGrid = constructGrid(this.state.colCount, this.state.rowCount);
     this.setState({ grid: resetGrid, mazeBuilt: false });
   }
 
@@ -146,6 +154,25 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
+  updateMazeSize(incrementVector) {
+    const { mazeBuilt, processing, colCount, rowCount } = this.state;
+    if (!mazeBuilt && !processing) {
+      this.setState(
+        {
+          colCount: colCount + incrementVector[0],
+          rowCount: rowCount + incrementVector[1],
+        },
+        () => {
+          const newGrid = constructGrid(
+            this.state.colCount,
+            this.state.rowCount
+          );
+          this.setState({ grid: newGrid });
+        }
+      );
+    }
+  }
+
   render() {
     const { grid, mazeBuilt, processing } = this.state;
 
@@ -158,6 +185,7 @@ export default class MazeArtVisualizer extends Component {
           disableWalls={() => this.disableWalls()}
           mazeBuilt={mazeBuilt}
           processing={processing}
+          updateMazeSize={(incrementVal) => this.updateMazeSize(incrementVal)}
         />
 
         <div id="grid">
@@ -215,11 +243,11 @@ const setupNode = (row, col) => {
   return node;
 };
 
-const constructGrid = () => {
+const constructGrid = (colNum, rowNum) => {
   const grid = [];
-  for (let row = 0; row < 10; row++) {
+  for (let row = 0; row < rowNum; row++) {
     const currRow = [];
-    for (let col = 0; col < 15; col++) {
+    for (let col = 0; col < colNum; col++) {
       currRow.push(setupNode(row, col));
     }
     grid.push(currRow);

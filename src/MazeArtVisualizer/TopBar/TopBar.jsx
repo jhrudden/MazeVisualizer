@@ -61,7 +61,7 @@ export default class TopBar extends Component {
           <div className="navbar-slider">
             Scale:{" "}
             <Slider
-              updateMazeSize={(changeVector) => updateMazeSize(changeVector)}
+              updateMazeSize={(growthScalar) => updateMazeSize(growthScalar)}
               mazeBuilt={mazeBuilt}
               processing={processing}
             />

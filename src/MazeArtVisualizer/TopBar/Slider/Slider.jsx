@@ -6,8 +6,8 @@ export default class Slider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pastSliderValue: 1,
-      value: 1,
+      pastSliderValue: 0,
+      value: 0,
     };
   }
 
@@ -21,18 +21,17 @@ export default class Slider extends Component {
       <input
         type="range"
         className="slider"
-        min={1}
+        min={0}
         max={8}
         value={value}
-        step={1}
         onChange={(e) => {
           console.log(e.target.value);
           if (!mazeBuilt && !processing) {
             if (pastSliderValue < e.target.value) {
-              updateMazeSize([3, 1]);
+              updateMazeSize(e.target.value);
               this.setState({ value: e.target.value });
             } else {
-              updateMazeSize([-3, -1]);
+              updateMazeSize(e.target.value);
               this.setState({ value: e.target.value });
             }
 

@@ -9,6 +9,7 @@ const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
 const MAX_COL_COUNT = 45;
 const MAX_ROW_COUNT = 30;
+const GROWTH_INCREMENT = [1, 3];
 
 export default class MazeArtVisualizer extends Component {
   constructor(props) {
@@ -154,19 +155,16 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
-  updateMazeSize(incrementVector) {
-    const { mazeBuilt, processing, colCount, rowCount } = this.state;
+  updateMazeSize(growthScalar) {
+    const { mazeBuilt, processing } = this.state;
     if (!mazeBuilt && !processing) {
       this.setState(
         {
-          colCount: colCount + incrementVector[0],
-          rowCount: rowCount + incrementVector[1],
+          colCount: BASE_COL_COUNT + growthScalar * GROWTH_INCREMENT[1],
+          rowCount: BASE_ROW_COUNT + growthScalar * GROWTH_INCREMENT[0],
         },
         () => {
-          const newGrid = constructGrid(
-            this.state.colCount,
-            this.state.rowCount
-          );
+          var newGrid = constructGrid(this.state.colCount, this.state.rowCount);
           this.setState({ grid: newGrid });
         }
       );
@@ -185,7 +183,7 @@ export default class MazeArtVisualizer extends Component {
           disableWalls={() => this.disableWalls()}
           mazeBuilt={mazeBuilt}
           processing={processing}
-          updateMazeSize={(incrementVal) => this.updateMazeSize(incrementVal)}
+          updateMazeSize={(growthScalar) => this.updateMazeSize(growthScalar)}
         />
 
         <div id="grid">
@@ -230,12 +228,12 @@ export default class MazeArtVisualizer extends Component {
   }
 }
 
-const setupNode = (row, col) => {
+const setupNode = (row, col, startPoint, endPoint) => {
   const node = {
     row,
     col,
-    isStart: row === 5 && col === 1,
-    isEnd: row === 5 && col === 13,
+    isStart: row === startPoint[0] && col === startPoint[1],
+    isEnd: row === endPoint[0] && col === endPoint[1],
     neighbors: [null, null, null, null],
     showWalls: false,
     setColor: null,
@@ -245,10 +243,13 @@ const setupNode = (row, col) => {
 
 const constructGrid = (colNum, rowNum) => {
   const grid = [];
+  // always want start and end to init on opposite sides of middle row
+  const startCoord = [Math.floor(rowNum / 2) - ((rowNum - 1) % 2), 1];
+  const endCoord = [Math.floor(rowNum / 2) - ((rowNum - 1) % 2), colNum - 2];
   for (let row = 0; row < rowNum; row++) {
     const currRow = [];
     for (let col = 0; col < colNum; col++) {
-      currRow.push(setupNode(row, col));
+      currRow.push(setupNode(row, col, startCoord, endCoord));
     }
     grid.push(currRow);
   }

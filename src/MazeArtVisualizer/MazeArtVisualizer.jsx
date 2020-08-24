@@ -2,8 +2,10 @@ import React, { Component } from "react";
 
 import Node from "./Node/Node.jsx";
 import "./MazeArtVisualizer.css";
-import { prims, connect } from "../Algorithms/prims.jsx";
+import { prims } from "../Algorithms/prims.jsx";
 import TopBar from "./TopBar/TopBar.jsx";
+import { connect } from "../Algorithms/Utils";
+import { depthFirstSearch } from "../Algorithms/DFS.jsx";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -23,14 +25,21 @@ export default class MazeArtVisualizer extends Component {
       mazeBuilt: false,
       colCount: BASE_COL_COUNT,
       rowCount: BASE_ROW_COUNT,
+      startCoord: null,
+      endCoord: null,
     };
   }
   componentDidMount() {
     const { colCount, rowCount } = this.state;
-    const grid = constructGrid(colCount, rowCount);
+    const startCoord = [Math.floor(rowCount / 2) - ((rowCount - 1) % 2), 1];
+    const endCoord = [
+      Math.floor(rowCount / 2) - ((rowCount - 1) % 2),
+      colCount - 2,
+    ];
+    const grid = constructGrid(colCount, rowCount, startCoord, endCoord);
     const hasStart = true;
     const hasEnd = true;
-    this.setState({ grid, hasStart, hasEnd });
+    this.setState({ grid, hasStart, hasEnd, startCoord, endCoord });
   }
 
   onMouseDown(row, col) {
@@ -44,7 +53,10 @@ export default class MazeArtVisualizer extends Component {
         isStart: false,
       };
       newGrid[row][col] = newNode;
-      this.setState({ grid: newGrid, hasStart: !hasStart });
+      this.setState({
+        grid: newGrid,
+        hasStart: !hasStart,
+      });
     } else if (isEnd) {
       const newNode = {
         ...node,
@@ -63,19 +75,25 @@ export default class MazeArtVisualizer extends Component {
     const node = newGrid[row][col];
     const { isEnd, isStart } = node;
     if (!hasStart && !isEnd) {
+      const newStart = [node.row, node.col];
       const newNode = {
         ...node,
         isStart: true,
       };
       newGrid[row][col] = newNode;
-      this.setState({ grid: newGrid, hasStart: !hasStart });
+      this.setState({
+        grid: newGrid,
+        hasStart: !hasStart,
+        startCoord: newStart,
+      });
     } else if (!hasEnd && !isStart) {
+      const newEnd = [node.row, node.col];
       const newNode = {
         ...node,
         isEnd: true,
       };
       newGrid[row][col] = newNode;
-      this.setState({ grid: newGrid, hasEnd: !hasEnd });
+      this.setState({ grid: newGrid, hasEnd: !hasEnd, endCoord: newEnd });
     } else {
       return;
     }
@@ -121,7 +139,7 @@ export default class MazeArtVisualizer extends Component {
       const node2 = currConnection[1];
       const gradIndex = i % gradient.length;
       connect(node1, node2);
-      await waitFor(20);
+      await waitFor(10);
       node1.showWalls = true;
       node2.showWalls = true;
       if (isPathColored) {
@@ -171,6 +189,25 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
+  dfs() {
+    const { mazeBuilt } = this.state;
+    if (mazeBuilt) {
+      const { grid, startCoord, endCoord } = this.state;
+      const searchArea = depthFirstSearch(grid, startCoord, endCoord);
+      this.setState({ isPathColored: true });
+      this.dfsVisualizer(searchArea);
+    }
+  }
+
+  async dfsVisualizer(searchArea) {
+    const { grid } = this.state;
+    for (var i = 0; i < searchArea.length; i++) {
+      await waitFor(10);
+      searchArea[i].setColor = "#9bdbd7";
+      this.setState({ grid });
+    }
+  }
+
   render() {
     const { grid, mazeBuilt, processing } = this.state;
 
@@ -184,6 +221,7 @@ export default class MazeArtVisualizer extends Component {
           mazeBuilt={mazeBuilt}
           processing={processing}
           updateMazeSize={(growthScalar) => this.updateMazeSize(growthScalar)}
+          dfs={() => this.dfs()}
         />
 
         <div id="grid">
@@ -241,11 +279,9 @@ const setupNode = (row, col, startPoint, endPoint) => {
   return node;
 };
 
-const constructGrid = (colNum, rowNum) => {
+const constructGrid = (colNum, rowNum, startCoord, endCoord) => {
   const grid = [];
   // always want start and end to init on opposite sides of middle row
-  const startCoord = [Math.floor(rowNum / 2) - ((rowNum - 1) % 2), 1];
-  const endCoord = [Math.floor(rowNum / 2) - ((rowNum - 1) % 2), colNum - 2];
   for (let row = 0; row < rowNum; row++) {
     const currRow = [];
     for (let col = 0; col < colNum; col++) {

@@ -20,6 +20,7 @@ export default class TopBar extends Component {
       processing,
       mazeBuilt,
       updateMazeSize,
+      dfs,
     } = this.props;
     const { showingWalls, colorizePath } = this.state;
     return (
@@ -66,6 +67,9 @@ export default class TopBar extends Component {
               processing={processing}
             />
           </div>
+          <button className="navbar-contents" onClick={() => dfs()}>
+            Depth First Search
+          </button>
         </div>
       </div>
     );

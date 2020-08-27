@@ -6,6 +6,7 @@ import { prims } from "../Algorithms/prims.jsx";
 import TopBar from "./TopBar/TopBar.jsx";
 import { connect } from "../Algorithms/Utils";
 import { depthFirstSearch } from "../Algorithms/DFS.jsx";
+import { wait } from "@testing-library/react";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -151,7 +152,8 @@ export default class MazeArtVisualizer extends Component {
   }
 
   resetGrid() {
-    const resetGrid = constructGrid(this.state.colCount, this.state.rowCount);
+    const { colCount, rowCount, startCoord, endCoord } = this.state;
+    const resetGrid = constructGrid(colCount, rowCount, startCoord, endCoord);
     this.setState({ grid: resetGrid, mazeBuilt: false });
   }
 
@@ -174,7 +176,14 @@ export default class MazeArtVisualizer extends Component {
   }
 
   updateMazeSize(growthScalar) {
-    const { mazeBuilt, processing } = this.state;
+    const {
+      mazeBuilt,
+      processing,
+      colCount,
+      rowCount,
+      startCoord,
+      endCoord,
+    } = this.state;
     if (!mazeBuilt && !processing) {
       this.setState(
         {
@@ -182,28 +191,40 @@ export default class MazeArtVisualizer extends Component {
           rowCount: BASE_ROW_COUNT + growthScalar * GROWTH_INCREMENT[0],
         },
         () => {
-          var newGrid = constructGrid(this.state.colCount, this.state.rowCount);
+          var newGrid = constructGrid(colCount, rowCount, startCoord, endCoord);
           this.setState({ grid: newGrid });
         }
       );
     }
   }
 
-  dfs() {
+  async dfs() {
     const { mazeBuilt } = this.state;
     if (mazeBuilt) {
       const { grid, startCoord, endCoord } = this.state;
-      const searchArea = depthFirstSearch(grid, startCoord, endCoord);
+      const searchAndPath = depthFirstSearch(grid, startCoord, endCoord);
       this.setState({ isPathColored: true });
-      this.dfsVisualizer(searchArea);
+      this.dfsVisualizer(searchAndPath[0], searchAndPath[1]);
+      // await waitFor(10);
     }
   }
 
-  async dfsVisualizer(searchArea) {
+  async dfsVisualizer(searchArea, path) {
     const { grid } = this.state;
     for (var i = 0; i < searchArea.length; i++) {
       await waitFor(10);
       searchArea[i].setColor = "#9bdbd7";
+      this.setState({ grid });
+    }
+    await waitFor(10);
+    this.pathVisualizer(path);
+  }
+
+  async pathVisualizer(path) {
+    const { grid } = this.state;
+    for (var i = 0; i < path.length; i++) {
+      await waitFor(10);
+      path[i].setColor = "brown";
       this.setState({ grid });
     }
   }
@@ -266,12 +287,12 @@ export default class MazeArtVisualizer extends Component {
   }
 }
 
-const setupNode = (row, col, startPoint, endPoint) => {
+const setupNode = (row, col, startCoord, endCoord) => {
   const node = {
     row,
     col,
-    isStart: row === startPoint[0] && col === startPoint[1],
-    isEnd: row === endPoint[0] && col === endPoint[1],
+    isStart: row === startCoord[0] && col === startCoord[1],
+    isEnd: row === endCoord[0] && col === endCoord[1],
     neighbors: [null, null, null, null],
     showWalls: false,
     setColor: null,

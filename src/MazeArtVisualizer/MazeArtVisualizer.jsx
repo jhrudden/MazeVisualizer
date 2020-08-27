@@ -175,7 +175,7 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
-  updateMazeSize(growthScalar) {
+  updateMazeSize(sliderVal) {
     const {
       mazeBuilt,
       processing,
@@ -187,11 +187,17 @@ export default class MazeArtVisualizer extends Component {
     if (!mazeBuilt && !processing) {
       this.setState(
         {
-          colCount: BASE_COL_COUNT + growthScalar * GROWTH_INCREMENT[1],
-          rowCount: BASE_ROW_COUNT + growthScalar * GROWTH_INCREMENT[0],
+          colCount: BASE_COL_COUNT + sliderVal * GROWTH_INCREMENT[1],
+          rowCount: BASE_ROW_COUNT + sliderVal * GROWTH_INCREMENT[0],
         },
         () => {
-          var newGrid = constructGrid(colCount, rowCount, startCoord, endCoord);
+          var newGrid = constructGrid(
+            this.state.colCount,
+            this.state.rowCount,
+            startCoord,
+            endCoord
+          );
+          console.log(newGrid.length, newGrid[0].length);
           this.setState({ grid: newGrid });
         }
       );
@@ -205,7 +211,6 @@ export default class MazeArtVisualizer extends Component {
       const searchAndPath = depthFirstSearch(grid, startCoord, endCoord);
       this.setState({ isPathColored: true });
       this.dfsVisualizer(searchAndPath[0], searchAndPath[1]);
-      // await waitFor(10);
     }
   }
 

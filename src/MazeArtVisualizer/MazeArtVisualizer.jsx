@@ -6,7 +6,7 @@ import { prims } from "../Algorithms/prims.jsx";
 import TopBar from "./TopBar/TopBar.jsx";
 import { connect } from "../Algorithms/Utils";
 import { depthFirstSearch } from "../Algorithms/DFS.jsx";
-import { wait } from "@testing-library/react";
+import { breadthFirstSearch } from "../Algorithms/BFS.jsx";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -210,11 +210,20 @@ export default class MazeArtVisualizer extends Component {
       const { grid, startCoord, endCoord } = this.state;
       const searchAndPath = depthFirstSearch(grid, startCoord, endCoord);
       this.setState({ isPathColored: true });
-      this.dfsVisualizer(searchAndPath[0], searchAndPath[1]);
+      this.searchVisualizer(searchAndPath[0], searchAndPath[1]);
+    }
+  }
+  async bfs() {
+    const { mazeBuilt } = this.state;
+    if (mazeBuilt) {
+      const { grid, startCoord, endCoord } = this.state;
+      const searchAndPath = breadthFirstSearch(grid, startCoord, endCoord);
+      this.setState({ isPathColored: true });
+      this.searchVisualizer(searchAndPath[0], searchAndPath[1]);
     }
   }
 
-  async dfsVisualizer(searchArea, path) {
+  async searchVisualizer(searchArea, path) {
     const { grid } = this.state;
     for (var i = 0; i < searchArea.length; i++) {
       await waitFor(10);
@@ -248,6 +257,7 @@ export default class MazeArtVisualizer extends Component {
           processing={processing}
           updateMazeSize={(growthScalar) => this.updateMazeSize(growthScalar)}
           dfs={() => this.dfs()}
+          bfs={() => this.bfs()}
         />
 
         <div id="grid">

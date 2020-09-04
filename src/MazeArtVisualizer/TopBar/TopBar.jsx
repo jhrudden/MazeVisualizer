@@ -31,6 +31,17 @@ export default class TopBar extends Component {
             Reset Grid
           </button>
           <div className=" drop-down ">
+            <button className="drop-down-btn">Search Maze</button>
+            <div className="drop-down-content">
+              <a href="#" onClick={() => dfs()}>
+                Depth First Search
+              </a>
+              <a href="#" onClick={() => bfs()}>
+                Breadth First Search
+              </a>
+            </div>
+          </div>
+          <div className=" drop-down ">
             <button className="drop-down-btn">Build Maze</button>
             <div className="drop-down-content">
               <a href="#" onClick={() => prims()}>
@@ -67,17 +78,6 @@ export default class TopBar extends Component {
               mazeBuilt={mazeBuilt}
               processing={processing}
             />
-          </div>
-          <div className=" drop-down ">
-            <button className="drop-down-btn">Search Maze</button>
-            <div className="drop-down-content">
-              <a href="#" onClick={() => dfs()}>
-                Depth First Search
-              </a>
-              <a href="#" onClick={() => bfs()}>
-                Breadth First Search
-              </a>
-            </div>
           </div>
         </div>
       </div>

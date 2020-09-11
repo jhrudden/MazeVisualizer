@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./Node.css";
+import startPointImage from "../../Images/startPoint.png";
+import endPointImage from "../../Images/endPoint.png";
 
 export default class Node extends Component {
   drawWalls() {
@@ -35,17 +37,44 @@ export default class Node extends Component {
     return (
       <div
         id={`node-${row}-${col}`}
-        className={`node ${isStart ? "startNode" : isEnd ? "finishNode" : ""} ${
-          showWalls ? this.drawWalls() : ""
-        }`}
+        className={`node ${showWalls ? this.drawWalls() : ""}`}
         style={
-          setColor != null
+          setColor != null && !isEnd && !isStart
             ? { backgroundColor: setColor, outline: `1px solid ${setColor}` }
             : {}
         }
         onMouseDown={() => onMouseDown(row, col)}
         onMouseUp={() => onMouseUp(row, col)}
-      ></div>
+      >
+        <img
+          src={startPointImage}
+          style={
+            isStart
+              ? {
+                  display: "block",
+                  width: "30px",
+                  height: "30px",
+                  opacity: "0.35",
+                }
+              : { display: "none" }
+          }
+          alt="start point icon"
+        ></img>
+        <img
+          src={endPointImage}
+          style={
+            isEnd
+              ? {
+                  display: "block",
+                  width: "30px",
+                  height: "30px",
+                  opacity: "0.4",
+                }
+              : { display: "none" }
+          }
+          alt="end point icon"
+        ></img>
+      </div>
     );
   }
 }

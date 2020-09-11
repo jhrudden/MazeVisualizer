@@ -176,14 +176,7 @@ export default class MazeArtVisualizer extends Component {
   }
 
   updateMazeSize(sliderVal) {
-    const {
-      mazeBuilt,
-      processing,
-      colCount,
-      rowCount,
-      startCoord,
-      endCoord,
-    } = this.state;
+    const { mazeBuilt, processing } = this.state;
     if (!mazeBuilt && !processing) {
       this.setState(
         {
@@ -191,14 +184,21 @@ export default class MazeArtVisualizer extends Component {
           rowCount: BASE_ROW_COUNT + sliderVal * GROWTH_INCREMENT[0],
         },
         () => {
+          // check start and end nodes are not outside the scaled window
+          const { startCoord, endCoord, rowCount, colCount } = this.state;
+
           var newGrid = constructGrid(
             this.state.colCount,
             this.state.rowCount,
-            startCoord,
-            endCoord
+            updateIfOutOfBounds(startCoord, rowCount, colCount),
+            updateIfOutOfBounds(endCoord, rowCount, colCount)
           );
-          console.log(newGrid.length, newGrid[0].length);
-          this.setState({ grid: newGrid });
+
+          this.setState({
+            grid: newGrid,
+            endCoord: endCoord,
+            startCoord: startCoord,
+          });
         }
       );
     }
@@ -209,7 +209,6 @@ export default class MazeArtVisualizer extends Component {
     if (mazeBuilt) {
       const { grid, startCoord, endCoord } = this.state;
       const searchAndPath = depthFirstSearch(grid, startCoord, endCoord);
-      this.setState({ isPathColored: true });
       this.searchVisualizer(searchAndPath[0], searchAndPath[1]);
     }
   }
@@ -218,7 +217,6 @@ export default class MazeArtVisualizer extends Component {
     if (mazeBuilt) {
       const { grid, startCoord, endCoord } = this.state;
       const searchAndPath = breadthFirstSearch(grid, startCoord, endCoord);
-      this.setState({ isPathColored: true });
       this.searchVisualizer(searchAndPath[0], searchAndPath[1]);
     }
   }
@@ -329,3 +327,15 @@ const constructGrid = (colNum, rowNum, startCoord, endCoord) => {
 };
 
 const waitFor = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+
+const updateIfOutOfBounds = (coord, rowBound, colBound) => {
+  console.log("start", coord, rowBound, colBound);
+  if (coord[0] >= rowBound) {
+    coord[0] = rowBound - 1;
+  }
+  if (coord[1] >= colBound) {
+    coord[1] = colBound - 1;
+  }
+  console.log("end", coord);
+  return coord;
+};

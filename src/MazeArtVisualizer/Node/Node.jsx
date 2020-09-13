@@ -39,7 +39,7 @@ export default class Node extends Component {
         id={`node-${row}-${col}`}
         className={`node ${showWalls ? this.drawWalls() : ""}`}
         style={
-          setColor != null && !isEnd && !isStart
+          setColor != null
             ? { backgroundColor: setColor, outline: `1px solid ${setColor}` }
             : {}
         }
@@ -54,7 +54,7 @@ export default class Node extends Component {
                   display: "block",
                   width: "30px",
                   height: "30px",
-                  opacity: "0.35",
+                  opacity: "0.9",
                 }
               : { display: "none" }
           }
@@ -68,7 +68,7 @@ export default class Node extends Component {
                   display: "block",
                   width: "30px",
                   height: "30px",
-                  opacity: "0.4",
+                  opacity: "0.9",
                 }
               : { display: "none" }
           }

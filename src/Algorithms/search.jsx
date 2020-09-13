@@ -19,15 +19,16 @@ export function search(graph, worklist, startCoord, EndCoord) {
 
     currentNode = worklist.remove();
   }
+  roadtrip.push(endNode);
   const returnPair = [roadtrip, getPath(comeFrom, endNode)];
   return returnPair;
 }
 
 function getPath(comeFrom, endNode) {
   var currentNode = endNode;
-  const path = [];
+  const path = [currentNode];
   while (comeFrom.get(currentNode) != currentNode) {
-    path.splice(0, 0, currentNode);
+    path.splice(0, 0, comeFrom.get(currentNode));
     currentNode = comeFrom.get(currentNode);
   }
   return path;

@@ -22,7 +22,7 @@ export default class Slider extends Component {
         type="range"
         className="slider"
         min={0}
-        max={8}
+        max={6}
         value={value}
         onChange={(e) => {
           console.log(e.target.value);

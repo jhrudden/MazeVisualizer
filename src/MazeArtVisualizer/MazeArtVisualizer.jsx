@@ -2,11 +2,11 @@ import React, { Component } from "react";
 
 import Node from "./Node/Node.jsx";
 import "./MazeArtVisualizer.css";
-import { prims } from "../Algorithms/prims.jsx";
+import { prims } from "../Algorithms/Building/Prims.jsx";
 import TopBar from "./TopBar/TopBar.jsx";
 import { connect } from "../Algorithms/Utils";
-import { depthFirstSearch } from "../Algorithms/DFS.jsx";
-import { breadthFirstSearch } from "../Algorithms/BFS.jsx";
+import { depthFirstSearch } from "../Algorithms/Searching/DFS.jsx";
+import { breadthFirstSearch } from "../Algorithms/Searching/BFS.jsx";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -228,7 +228,7 @@ export default class MazeArtVisualizer extends Component {
       searchArea[i].setColor = "#9bdbd7";
       this.setState({ grid });
     }
-    await waitFor(10);
+    await waitFor(5);
     this.pathVisualizer(path);
   }
 

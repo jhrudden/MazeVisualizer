@@ -1,5 +1,5 @@
-import PriorityQ from "./PriorityQ.jsx";
-import { getNeighbors } from "./Utils";
+import PriorityQ from "../DataStructures/PriorityQ.jsx";
+import { getNeighbors } from "../Utils";
 
 // Uses Prim's Randomized Algorithm to add all cells, node by node, to a Maze.
 // Algorthm goes as follows

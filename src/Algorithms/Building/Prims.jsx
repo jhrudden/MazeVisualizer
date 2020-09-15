@@ -7,7 +7,7 @@ import { getNeighbors } from "../Utils";
 // - randomly select a node to the worklist and if it isn't in the maze,
 // then add it
 
-export function prims(graph) {
+export default function prims(graph) {
   const randRow = Math.floor(Math.random() * graph.length);
   const randCol = Math.floor(Math.random() * graph[0].length);
   const firstInWork = graph[randRow][randCol];

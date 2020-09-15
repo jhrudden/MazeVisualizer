@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./TopBar.css";
 import Slider from "./Slider/Slider.jsx";
+import dfsBuilder from "../../Algorithms/Building/DFSBuilder";
 
 export default class TopBar extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export default class TopBar extends Component {
       updateMazeSize,
       dfs,
       bfs,
+      dfsBuild,
     } = this.props;
     const { showingWalls, colorizePath } = this.state;
     return (
@@ -46,6 +48,9 @@ export default class TopBar extends Component {
             <div className="drop-down-content">
               <a href="#" onClick={() => prims()}>
                 prims
+              </a>
+              <a href="#" onClick={() => dfsBuild()}>
+                Depth First Build
               </a>
             </div>
           </div>

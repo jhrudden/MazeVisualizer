@@ -2,11 +2,12 @@ import React, { Component } from "react";
 
 import Node from "./Node/Node.jsx";
 import "./MazeArtVisualizer.css";
-import { prims } from "../Algorithms/Building/Prims.jsx";
+import prims from "../Algorithms/Building/Prims.jsx";
 import TopBar from "./TopBar/TopBar.jsx";
 import { connect } from "../Algorithms/Utils";
-import { depthFirstSearch } from "../Algorithms/Searching/DFS.jsx";
-import { breadthFirstSearch } from "../Algorithms/Searching/BFS.jsx";
+import depthFirstSearch from "../Algorithms/Searching/DFS.jsx";
+import breadthFirstSearch from "../Algorithms/Searching/BFS.jsx";
+import dfsBuilder from "../Algorithms/Building/DFSBuilder.jsx";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -107,6 +108,31 @@ export default class MazeArtVisualizer extends Component {
       const loadOrder = prims(grid);
       this.visualizePrims(loadOrder);
     }
+  }
+
+  dfsBuild() {
+    if (!this.state.processing && !this.state.mazeBuilt) {
+      this.setState({ processing: true });
+      const { grid } = this.state;
+      const loadOrder = dfsBuilder(grid);
+      this.visualizeDFSBuilder(loadOrder);
+    }
+  }
+
+  async visualizeDFSBuilder(loadOrder) {
+    const { grid } = this.state;
+
+    for (var i = 0; i < loadOrder.length; i++) {
+      const currConnection = loadOrder[i];
+      const node1 = currConnection[0];
+      const node2 = currConnection[1];
+      connect(node1, node2);
+      await waitFor(10);
+      node1.showWalls = true;
+      node2.showWalls = true;
+      this.setState({ grid });
+    }
+    this.setState({ processing: false, mazeBuilt: true });
   }
 
   async visualizePrims(loadOrder) {
@@ -256,6 +282,7 @@ export default class MazeArtVisualizer extends Component {
           updateMazeSize={(growthScalar) => this.updateMazeSize(growthScalar)}
           dfs={() => this.dfs()}
           bfs={() => this.bfs()}
+          dfsBuild={() => this.dfsBuild()}
         />
 
         <div id="grid">

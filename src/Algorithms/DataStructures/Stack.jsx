@@ -10,4 +10,8 @@ export default class Stack {
   remove() {
     return this.stack.pop();
   }
+
+  isEmpty() {
+    return this.stack.length == 0;
+  }
 }

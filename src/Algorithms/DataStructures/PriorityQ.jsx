@@ -5,21 +5,21 @@ export default class PriorityQ {
 
   insert(item, weight) {
     this.queue.push([weight, item]);
-    this.up_heap(this.queue.length - 1);
+    this.upHeap(this.queue.length - 1);
   }
 
-  remove_min() {
+  removeMin() {
     const last_index = this.queue.length - 1;
     const temp = this.queue[0];
     this.queue[0] = this.queue[last_index];
     this.queue[last_index] = temp;
     const min = this.queue.pop(last_index);
-    this.down_heap(0);
+    this.downHeap(0);
 
     return min[1];
   }
 
-  up_heap(index) {
+  upHeap(index) {
     var parent = Math.floor((index - 1) / 2);
 
     if (index > 0 && this.queue[index][0] < this.queue[parent][0]) {
@@ -28,11 +28,11 @@ export default class PriorityQ {
       this.queue[index] = temp;
       index = parent;
 
-      this.up_heap(index);
+      this.upHeap(index);
     }
   }
 
-  down_heap(index) {
+  downHeap(index) {
     if (index >= this.queue.length - 1) {
       return;
     }
@@ -56,11 +56,11 @@ export default class PriorityQ {
       this.queue[index] = temp;
       index = min_child_i;
 
-      this.down_heap(index);
+      this.downHeap(index);
     }
   }
 
-  is_empty() {
+  isEmpty() {
     return this.queue.length == 0;
   }
   size() {

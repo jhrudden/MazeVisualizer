@@ -21,7 +21,7 @@ export default function prims(graph) {
   const vertices = [];
 
   while (vertices.length < graphSize) {
-    const currEdge = worklist.remove_min();
+    const currEdge = worklist.removeMin();
     const [u, v] = currEdge;
 
     if (!vertices.includes(v)) {

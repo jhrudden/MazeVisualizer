@@ -7,7 +7,7 @@ import TopBar from "./TopBar/TopBar.jsx";
 import { connect } from "../Algorithms/Utils";
 import depthFirstSearch from "../Algorithms/Searching/DFS.jsx";
 import breadthFirstSearch from "../Algorithms/Searching/BFS.jsx";
-import dfsBuilder from "../Algorithms/Building/DFSBuilder.jsx";
+import kruskel from "../Algorithms/Building/Kruskel.jsx";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -110,16 +110,16 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
-  dfsBuild() {
+  kruskel() {
     if (!this.state.processing && !this.state.mazeBuilt) {
       this.setState({ processing: true });
       const { grid } = this.state;
-      const loadOrder = dfsBuilder(grid);
-      this.visualizeDFSBuilder(loadOrder);
+      const loadOrder = kruskel(grid);
+      this.visualizeKruskel(loadOrder);
     }
   }
 
-  async visualizeDFSBuilder(loadOrder) {
+  async visualizeKruskel(loadOrder) {
     const { grid } = this.state;
 
     for (var i = 0; i < loadOrder.length; i++) {
@@ -282,7 +282,7 @@ export default class MazeArtVisualizer extends Component {
           updateMazeSize={(growthScalar) => this.updateMazeSize(growthScalar)}
           dfs={() => this.dfs()}
           bfs={() => this.bfs()}
-          dfsBuild={() => this.dfsBuild()}
+          kruskel={() => this.kruskel()}
         />
 
         <div id="grid">

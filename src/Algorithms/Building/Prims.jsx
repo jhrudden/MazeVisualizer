@@ -7,6 +7,8 @@ import { getNeighbors } from "../Utils";
 // - randomly select a node to the worklist and if it isn't in the maze,
 // then add it
 
+//! change vertices to hashmap
+
 export default function prims(graph) {
   const randRow = Math.floor(Math.random() * graph.length);
   const randCol = Math.floor(Math.random() * graph[0].length);
@@ -18,15 +20,15 @@ export default function prims(graph) {
     Math.floor(Math.random() * graphSize)
   );
   const addInOrder = [];
-  const vertices = [];
+  const vertices = new Map();
 
-  while (vertices.length < graphSize) {
+  while (vertices.size < graphSize) {
     const currEdge = worklist.removeMin();
     const [u, v] = currEdge;
 
-    if (!vertices.includes(v)) {
+    if (!vertices.has(v)) {
       const incidentNeighbors = getNeighbors(graph, v);
-      vertices.push(v);
+      vertices.set(v, v);
       addInOrder.push(currEdge);
       for (var i = 0; i < incidentNeighbors.length; i++) {
         const neighbor = incidentNeighbors[i];

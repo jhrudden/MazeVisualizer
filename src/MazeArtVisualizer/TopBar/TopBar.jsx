@@ -24,6 +24,7 @@ export default class TopBar extends Component {
       dfs,
       bfs,
       kruskel,
+      nonPerfectKruskel,
     } = this.props;
     const { showingWalls, colorizePath } = this.state;
     return (
@@ -51,6 +52,9 @@ export default class TopBar extends Component {
               </a>
               <a href="#" onClick={() => kruskel()}>
                 Kruskel's
+              </a>
+              <a href="#" onClick={() => nonPerfectKruskel()}>
+                Kruskel (Non-Perfect)
               </a>
             </div>
           </div>

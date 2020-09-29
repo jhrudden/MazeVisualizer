@@ -8,6 +8,7 @@ import { connect } from "../Algorithms/Utils";
 import depthFirstSearch from "../Algorithms/Searching/DFS.jsx";
 import breadthFirstSearch from "../Algorithms/Searching/BFS.jsx";
 import kruskel from "../Algorithms/Building/Kruskel.jsx";
+import nonPerfectKruskel from "../Algorithms/Building/NonPerfectKruskel.jsx";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -119,6 +120,15 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
+  nonPerfectKruskel() {
+    if (!this.state.processing && !this.state.mazeBuilt) {
+      this.setState({ processing: true });
+      const { grid } = this.state;
+      const loadOrder = nonPerfectKruskel(grid);
+      this.visualizeKruskel(loadOrder);
+    }
+  }
+
   async visualizeKruskel(loadOrder) {
     const { grid } = this.state;
 
@@ -132,7 +142,7 @@ export default class MazeArtVisualizer extends Component {
       node2.showWalls = true;
       this.setState({ grid });
     }
-    this.setState({ processing: false, mazeBuilt: true });
+    this.setState({ processing: false, mazeBuilt: true, grid });
   }
 
   async visualizePrims(loadOrder) {
@@ -283,6 +293,7 @@ export default class MazeArtVisualizer extends Component {
           dfs={() => this.dfs()}
           bfs={() => this.bfs()}
           kruskel={() => this.kruskel()}
+          nonPerfectKruskel={() => this.nonPerfectKruskel()}
         />
 
         <div id="grid">

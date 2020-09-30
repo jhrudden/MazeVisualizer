@@ -8,7 +8,6 @@ export default class TopBar extends Component {
     super(props);
     this.state = {
       showingWalls: false,
-      colorizePath: false,
     };
   }
 
@@ -16,7 +15,6 @@ export default class TopBar extends Component {
     const {
       prims,
       resetGrid,
-      toggleColoredPath,
       disableWalls,
       processing,
       mazeBuilt,
@@ -26,7 +24,7 @@ export default class TopBar extends Component {
       kruskel,
       nonPerfectKruskel,
     } = this.props;
-    const { showingWalls, colorizePath } = this.state;
+    const { showingWalls } = this.state;
     return (
       <div className="navbar">
         <div className="buttons">
@@ -58,17 +56,6 @@ export default class TopBar extends Component {
               </a>
             </div>
           </div>
-          <button
-            className="navbar-contents"
-            onClick={() => {
-              if (!processing) {
-                this.setState({ colorizePath: !colorizePath });
-                toggleColoredPath();
-              }
-            }}
-          >
-            Colorized Paths: {!colorizePath ? "Off" : "On"}
-          </button>
           <button
             className="navbar-contents"
             onClick={() => {

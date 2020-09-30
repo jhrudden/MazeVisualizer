@@ -23,7 +23,6 @@ export default class MazeArtVisualizer extends Component {
       grid: [],
       hasStart: false,
       hasEnd: false,
-      isPathColored: false,
       processing: false,
       mazeBuilt: false,
       colCount: BASE_COL_COUNT,
@@ -107,7 +106,7 @@ export default class MazeArtVisualizer extends Component {
       this.setState({ processing: true });
       const { grid } = this.state;
       const loadOrder = prims(grid);
-      this.visualizePrims(loadOrder);
+      this.visualizeBuild(loadOrder);
     }
   }
 
@@ -116,7 +115,7 @@ export default class MazeArtVisualizer extends Component {
       this.setState({ processing: true });
       const { grid } = this.state;
       const loadOrder = kruskel(grid);
-      this.visualizeKruskel(loadOrder);
+      this.visualizeBuild(loadOrder);
     }
   }
 
@@ -125,11 +124,11 @@ export default class MazeArtVisualizer extends Component {
       this.setState({ processing: true });
       const { grid } = this.state;
       const loadOrder = nonPerfectKruskel(grid);
-      this.visualizeKruskel(loadOrder);
+      this.visualizeBuild(loadOrder);
     }
   }
 
-  async visualizeKruskel(loadOrder) {
+  async visualizeBuild(loadOrder) {
     const { grid } = this.state;
 
     for (var i = 0; i < loadOrder.length; i++) {
@@ -142,48 +141,6 @@ export default class MazeArtVisualizer extends Component {
       node2.showWalls = true;
       this.setState({ grid });
     }
-    this.setState({ processing: false, mazeBuilt: true, grid });
-  }
-
-  async visualizePrims(loadOrder) {
-    const { grid, isPathColored } = this.state;
-
-    // TODO: make gradient get possibly a slider or maybe better longer set of colors
-    const gradient = [
-      "#83FBFA",
-      "#8EEFEE",
-      "#9AE4E3",
-      "#A5D8D7",
-      "#B1CDCC",
-      "#C8B6B5",
-      "#D3AAAA",
-      "#DF9F9E",
-      "#EA9393",
-      "#F68888",
-      "#EA9393",
-      "#DF9F9E",
-      "#D3AAAA",
-      "#C8B6B5",
-      "#B1CDCC",
-      "#A5D8D7",
-      "#9AE4E3",
-      "#8EEFEE",
-    ];
-
-    for (var i = 0; i < loadOrder.length; i++) {
-      const currConnection = loadOrder[i];
-      const node1 = currConnection[0];
-      const node2 = currConnection[1];
-      const gradIndex = i % gradient.length;
-      connect(node1, node2);
-      await waitFor(10);
-      node1.showWalls = true;
-      node2.showWalls = true;
-      if (isPathColored) {
-        node2.setColor = gradient[gradIndex];
-      }
-      this.setState({ grid });
-    }
     this.setState({ processing: false, mazeBuilt: true });
   }
 
@@ -191,11 +148,6 @@ export default class MazeArtVisualizer extends Component {
     const { colCount, rowCount, startCoord, endCoord } = this.state;
     const resetGrid = constructGrid(colCount, rowCount, startCoord, endCoord);
     this.setState({ grid: resetGrid, mazeBuilt: false });
-  }
-
-  toggleColoredPath() {
-    const { isPathColored } = this.state;
-    this.setState({ isPathColored: !isPathColored });
   }
 
   disableWalls() {
@@ -270,6 +222,7 @@ export default class MazeArtVisualizer extends Component {
 
   async pathVisualizer(path) {
     const { grid } = this.state;
+
     for (var i = 0; i < path.length; i++) {
       await waitFor(10);
       path[i].setColor = "brown";
@@ -285,7 +238,6 @@ export default class MazeArtVisualizer extends Component {
         <TopBar
           prims={() => this.prims()}
           resetGrid={() => this.resetGrid()}
-          toggleColoredPath={() => this.toggleColoredPath()}
           disableWalls={() => this.disableWalls()}
           mazeBuilt={mazeBuilt}
           processing={processing}

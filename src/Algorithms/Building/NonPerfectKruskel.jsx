@@ -1,12 +1,11 @@
 import kruskel from "./Kruskel.jsx";
+import generateNonPerfect from "./NonPerfect";
 
-//! maybe randomly select a edge and add one of its borders to edge list
 export default function nonPerfectKruskel(graph) {
   const edgeList = kruskel(graph);
-  var edgesToCut = Math.floor(edgeList.length * 0.05);
-  while (edgesToCut > 0) {
-    edgeList.pop(Math.floor(Math.random() * edgeList.length));
-    edgesToCut--;
-  }
-  return edgeList;
+  return generateNonPerfect(
+    graph,
+    edgeList,
+    Math.floor(graph.length * graph[0].length * 0.1)
+  );
 }

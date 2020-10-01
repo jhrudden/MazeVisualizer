@@ -1,7 +1,7 @@
 # Maze Visualizer
 Build a React WebApp for visualizing maze building and solving algorithms.
 
-##Functionalities
+##Functionalities##
 Allows user to:
 	- **Move** start and end points for maze solving.
 	- **Generate** Mazes using two different maze builders:

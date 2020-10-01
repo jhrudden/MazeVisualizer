@@ -1,5 +1,5 @@
 # Maze Visualizer
-Build a React WebApp for visualizing maze building and solving algorithms.
+Built a React WebApp for visualizing maze building and solving algorithms.
 
 ## Functionalities
 

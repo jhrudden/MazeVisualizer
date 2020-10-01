@@ -8,7 +8,7 @@ import { connect } from "../Algorithms/Utils";
 import depthFirstSearch from "../Algorithms/Searching/DFS.jsx";
 import breadthFirstSearch from "../Algorithms/Searching/BFS.jsx";
 import kruskel from "../Algorithms/Building/Kruskel.jsx";
-import nonPerfectKruskel from "../Algorithms/Building/NonPerfectKruskel.jsx";
+import nonPerfectPrims from "../Algorithms/Building/nonPerfectPrims.jsx";
 
 const BASE_COL_COUNT = 15;
 const BASE_ROW_COUNT = 10;
@@ -45,7 +45,10 @@ export default class MazeArtVisualizer extends Component {
   }
 
   onMouseDown(row, col) {
-    const { grid, hasStart, hasEnd } = this.state;
+    const { grid, hasStart, hasEnd, processing, mazeBuilt } = this.state;
+    if (mazeBuilt || processing) {
+      return;
+    }
     const newGrid = grid.slice();
     const node = newGrid[row][col];
     const { isStart, isEnd } = node;
@@ -119,11 +122,11 @@ export default class MazeArtVisualizer extends Component {
     }
   }
 
-  nonPerfectKruskel() {
+  nonPerfect() {
     if (!this.state.processing && !this.state.mazeBuilt) {
       this.setState({ processing: true });
       const { grid } = this.state;
-      const loadOrder = nonPerfectKruskel(grid);
+      const loadOrder = nonPerfectPrims(grid);
       this.visualizeBuild(loadOrder);
     }
   }
@@ -225,7 +228,7 @@ export default class MazeArtVisualizer extends Component {
 
     for (var i = 0; i < path.length; i++) {
       await waitFor(10);
-      path[i].setColor = "brown";
+      path[i].setColor = "#a6e0c0";
       this.setState({ grid });
     }
   }
@@ -245,7 +248,7 @@ export default class MazeArtVisualizer extends Component {
           dfs={() => this.dfs()}
           bfs={() => this.bfs()}
           kruskel={() => this.kruskel()}
-          nonPerfectKruskel={() => this.nonPerfectKruskel()}
+          nonPerfect={() => this.nonPerfect()}
         />
 
         <div id="grid">

@@ -1,0 +1,3 @@
+//! change vertices to hashmap
+
+//! maybe randomly select a edge and add one of its borders to edge list

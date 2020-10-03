@@ -5,9 +5,9 @@ Build a React WebApp for visualizing maze building and solving algorithms.
 
 ### Allows user to:
 
-**Move** start and end points for maze solving.
+**Move** Start and End points for maze solving.
 	
-**Generate** Mazes using two different maze builders:
+**Generate** Mazes using several different maze building algorithms. Algorithms include:
 	
 	- Prims: Builds a maze one nodes at a time by merging collections of edges until a minimum spanning tree has been created.
 		
@@ -25,5 +25,6 @@ Build a React WebApp for visualizing maze building and solving algorithms.
 	
 **Scale** the maze size in order to make easier or more complex mazes.
 	
-**Reset** mazes, so new ones can be built.
+**Reset Maze** clears maze and path.
 	
+**Reset Path** clears the current search area and path

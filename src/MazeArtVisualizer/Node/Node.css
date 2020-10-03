@@ -5,6 +5,7 @@
   display: inline-block;
   border: solid 3px transparent;
   margin-bottom: -3px;
+  background: white;
 }
 
 .startNode {

@@ -29,6 +29,8 @@ export default class MazeArtVisualizer extends Component {
       rowCount: BASE_ROW_COUNT,
       startCoord: null,
       endCoord: null,
+      hasPath: false,
+      pathProcessessing: false,
     };
   }
   componentDidMount() {
@@ -196,17 +198,19 @@ export default class MazeArtVisualizer extends Component {
   }
 
   async dfs() {
-    const { mazeBuilt } = this.state;
-    if (mazeBuilt) {
+    const { mazeBuilt, hasPath, pathProcessessing } = this.state;
+    if (mazeBuilt && !hasPath && !pathProcessessing) {
       const { grid, startCoord, endCoord } = this.state;
+      this.setState({ pathProcessessing: true });
       const searchAndPath = depthFirstSearch(grid, startCoord, endCoord);
       this.searchVisualizer(searchAndPath[0], searchAndPath[1]);
     }
   }
   async bfs() {
-    const { mazeBuilt } = this.state;
-    if (mazeBuilt) {
+    const { mazeBuilt, hasPath, pathProcessessing } = this.state;
+    if (mazeBuilt && !hasPath && !pathProcessessing) {
       const { grid, startCoord, endCoord } = this.state;
+      this.setState({ pathProcessessing: true });
       const searchAndPath = breadthFirstSearch(grid, startCoord, endCoord);
       this.searchVisualizer(searchAndPath[0], searchAndPath[1]);
     }
@@ -221,15 +225,30 @@ export default class MazeArtVisualizer extends Component {
     }
     await waitFor(5);
     this.pathVisualizer(path);
+    this.setState({ hasPath: true });
   }
 
   async pathVisualizer(path) {
-    const { grid } = this.state;
+    const { grid, pathProcessessing } = this.state;
 
     for (var i = 0; i < path.length; i++) {
       await waitFor(10);
       path[i].setColor = "#a6e0c0";
       this.setState({ grid });
+    }
+    this.setState({ pathProcessessing: false });
+  }
+
+  resetPath() {
+    const { grid, pathProcessessing, mazeBuilt, hasPath } = this.state;
+    if (!pathProcessessing && mazeBuilt) {
+      const newGrid = grid.slice();
+      for (var i = 0; i < newGrid.length; i++) {
+        for (var j = 0; j < newGrid[i].length; j++) {
+          newGrid[i][j].setColor = "white";
+        }
+      }
+      this.setState({ grid: newGrid, hasPath: false });
     }
   }
 
@@ -249,6 +268,7 @@ export default class MazeArtVisualizer extends Component {
           bfs={() => this.bfs()}
           kruskel={() => this.kruskel()}
           nonPerfect={() => this.nonPerfect()}
+          resetPath={() => this.resetPath()}
         />
 
         <div id="grid">

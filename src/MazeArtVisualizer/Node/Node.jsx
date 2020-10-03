@@ -38,11 +38,7 @@ export default class Node extends Component {
       <div
         id={`node-${row}-${col}`}
         className={`node ${showWalls ? this.drawWalls() : ""}`}
-        style={
-          setColor != null
-            ? { backgroundColor: setColor, outline: `1px solid ${setColor}` }
-            : {}
-        }
+        style={setColor != null ? { backgroundColor: setColor } : {}}
         onMouseDown={() => onMouseDown(row, col)}
         onMouseUp={() => onMouseUp(row, col)}
       >

@@ -23,25 +23,12 @@ export default class TopBar extends Component {
       bfs,
       kruskel,
       nonPerfect,
+      resetPath,
     } = this.props;
     const { showingWalls } = this.state;
     return (
       <div className="navbar">
         <div className="buttons">
-          <button className="navbar-contents" onClick={() => resetGrid()}>
-            Reset Grid
-          </button>
-          <div className=" drop-down ">
-            <button className="drop-down-btn">Search Maze</button>
-            <div className="drop-down-content">
-              <a href="#" onClick={() => dfs()}>
-                Depth First Search
-              </a>
-              <a href="#" onClick={() => bfs()}>
-                Breadth First Search
-              </a>
-            </div>
-          </div>
           <div className=" drop-down ">
             <button className="drop-down-btn">Build Maze</button>
             <div className="drop-down-content">
@@ -56,6 +43,23 @@ export default class TopBar extends Component {
               </a>
             </div>
           </div>
+          <div className=" drop-down ">
+            <button className="drop-down-btn">Search Maze</button>
+            <div className="drop-down-content">
+              <a href="#" onClick={() => dfs()}>
+                Depth First Search
+              </a>
+              <a href="#" onClick={() => bfs()}>
+                Breadth First Search
+              </a>
+            </div>
+          </div>
+          <button className="navbar-contents" onClick={() => resetGrid()}>
+            Reset Grid
+          </button>
+          <button className="navbar-contents" onClick={() => resetPath()}>
+            Reset Path
+          </button>
           <button
             className="navbar-contents"
             onClick={() => {

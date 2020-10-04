@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/MazeVisualizer/precache-manifest.71ec20e0745cc15d31dd6b0125bb492b.js"
+  "/MazeVisualizer/precache-manifest.6cf64d4f87cba5ca15bb10fb77d1708f.js"
 );
 
 self.addEventListener('message', (event) => {

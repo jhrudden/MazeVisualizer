@@ -150,9 +150,9 @@ export default class MazeArtVisualizer extends Component {
   }
 
   resetGrid() {
-    const { colCount, rowCount, startCoord, endCoord } = this.state;
+    const { colCount, rowCount, startCoord, endCoord, hasPath } = this.state;
     const resetGrid = constructGrid(colCount, rowCount, startCoord, endCoord);
-    this.setState({ grid: resetGrid, mazeBuilt: false });
+    this.setState({ grid: resetGrid, mazeBuilt: false, hasPath: false });
   }
 
   disableWalls() {
